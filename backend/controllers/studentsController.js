@@ -5,12 +5,17 @@ const getStudentsByYear = async (req, res) => {
   try {
     const { yearId } = req.params;
     const students = await Student.find({ studyYear: yearId });
-    if (!students) {
-      return res
-        .status(404)
-        .json({ errorMessage: `No students yet in ${yearId}-th grade.` });
+    if (!students.length) {
+      return res.status(404).json({
+        errorMessage: `No students were found in this class.`,
+      });
     }
-    res.json({ students: students.map((s) => s.toObject({ getters: true })) });
+    const studentsMap = students.map((s) => ({
+      id: s._id,
+      name: s.name,
+      studyYear: s.studyYear,
+    }));
+    res.json({ students: studentsMap });
   } catch (error) {
     res.sendStatus(500);
   }
@@ -64,7 +69,6 @@ const registerStudent = async (req, res) => {
   // check to see if there are error in the req.body
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors);
     return res.status(422).json({
       errorMessage: "Invalid data. Pease check your data and try again.",
     });
@@ -85,7 +89,7 @@ const registerStudent = async (req, res) => {
   }
 };
 
-// delete student by it's id
+// delete student by id
 const deleteStudent = async (req, res) => {
   if (!req.user.teacher) {
     return res.status(401).json({ errorMessage: "Invalid credentials." });

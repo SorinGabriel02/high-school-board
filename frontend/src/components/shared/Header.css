@@ -1,0 +1,33 @@
+.mainHeader {
+  display: flex;
+  justify-content: space-between;
+  background-color: lightcyan;
+}
+
+.mainHeader p {
+  margin-left: 1vmax;
+}
+
+.mainHeader a {
+  text-decoration: none;
+  padding: 0.4rem;
+  color: black;
+}
+
+.mainHeader a:hover {
+  text-shadow: 0 0 3px;
+}
+
+.mainNav {
+  margin: 0;
+}
+
+.mainNav ul {
+  list-style: none;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem;
+}
