@@ -6,6 +6,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const usersRouter = require("./routes/userRoutes");
+const studentsRouter = require("./routes/studentRoutes");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(morgan("dev"));
 
 // routes
 app.use("/api/users", usersRouter);
+app.use("/api/students", studentsRouter);
 
 mongoose.connect(
   mongoDBUri,

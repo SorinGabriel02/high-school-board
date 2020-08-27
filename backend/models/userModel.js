@@ -19,7 +19,7 @@ const userSchema = new Schema({
   teacher: { type: Boolean, default: false },
 });
 
-// password hash before saving user
+// hash password before saving user
 userSchema.pre("save", async function (next) {
   const user = this;
   try {
