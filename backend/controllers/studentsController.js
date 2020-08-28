@@ -81,9 +81,13 @@ const registerStudent = async (req, res) => {
   try {
     const newStudent = new Student({ name, studyYear });
     const savedStudent = await newStudent.save();
-    res
-      .status(201)
-      .send({ newStudent: savedStudent.toObject({ getters: true }) });
+    res.status(201).send({
+      newStudent: {
+        name: savedStudent.name,
+        id: savedStudent._id,
+        studyYear: savedStudent.studyYear,
+      },
+    });
   } catch (error) {
     res.sendStatus(500);
   }
@@ -102,7 +106,7 @@ const deleteStudent = async (req, res) => {
         errorMessage: "This student could not be found. Unable to delete.",
       });
     }
-    res.sendStatus(204);
+    res.json({ deleted: "success", studentId });
   } catch (error) {
     res.sendStatus(500);
   }

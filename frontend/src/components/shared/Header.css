@@ -31,3 +31,9 @@
   align-items: center;
   padding: 1.2rem;
 }
+
+.mainNav button {
+  background-color: rgb(255, 212, 219);
+  border: 1px solid black;
+  cursor: pointer;
+}

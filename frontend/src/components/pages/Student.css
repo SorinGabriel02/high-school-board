@@ -1,0 +1,17 @@
+.gradeForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.gradeForm > * {
+  margin: 1vmax;
+}
+
+.loading {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

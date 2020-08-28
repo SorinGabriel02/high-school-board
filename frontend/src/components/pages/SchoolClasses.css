@@ -6,3 +6,7 @@
   text-decoration: none;
   color: orangered;
 }
+
+.schoolClasses a:hover {
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+}

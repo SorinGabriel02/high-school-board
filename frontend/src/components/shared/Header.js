@@ -1,9 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import "./Header.css";
 
-const Header = () => {
+const Header = ({ isAuthenticated, logout }) => {
   return (
     <header className="mainHeader">
       <NavLink to="/">
@@ -15,12 +16,21 @@ const Header = () => {
             <NavLink to="/">All Classes</NavLink>
           </li>
           <li>
-            <NavLink to="/login">Login</NavLink>
+            {!isAuthenticated ? (
+              <NavLink to="/login">Login</NavLink>
+            ) : (
+              <button onClick={() => logout()}>Logout</button>
+            )}
           </li>
         </ul>
       </nav>
     </header>
   );
+};
+
+Header.propTypes = {
+  isAuthenticated: PropTypes.string.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 export default Header;

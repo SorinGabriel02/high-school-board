@@ -1,11 +1,64 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import React, { useReducer, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const Student = () => {
+import "./Student.css";
+import useRequest from "../../hooks/useRequest";
+
+const initialState = {
+  isLoading: false,
+  name: "",
+  math: [],
+  biology: [],
+  sports: [],
+  history: [],
+  chosenSubject: "math",
+  grade: 5,
+  addGrade: false,
+};
+
+const studentReducer = (state, action) => {
+  switch (action.type) {
+    case "isLoading":
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+    case "loadStudent":
+      return {
+        ...state,
+        isLoading: false,
+        name: action.payload.name,
+        math: action.payload.math,
+        biology: action.payload.biology,
+        sports: action.payload.sports,
+        history: action.payload.history,
+      };
+    case "addGrade":
+      return {
+        ...state,
+        addGrade: action.payload,
+      };
+    case "grade":
+      return {
+        ...state,
+        grade: action.payload,
+      };
+    case "chosenSubject":
+      return {
+        ...state,
+        chosenSubject: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+const Student = ({ isAuthenticated, teacher }) => {
   const { studentId } = useParams();
-  const [student, setStudent] = useState({});
-  const [errorMessage, setErrorMessage] = useState("");
+  const history = useHistory();
+  const [data, errorMessage, makeReq, cancelReq] = useRequest();
+  const [state, dispatch] = useReducer(studentReducer, initialState);
 
   const displayGrades = (subject) => {
     let grades = "|";
@@ -15,39 +68,98 @@ const Student = () => {
     return grades === "|" ? "No grades yet." : grades;
   };
 
-  useEffect(() => {
-    const cancelReq = axios.CancelToken.source();
-    const getStudent = async () => {
-      try {
-        const response = await axios.get(`/students/${studentId}`, {
-          cancelToken: cancelReq.token,
-        });
-        setStudent(response.data.student);
-      } catch (error) {
-        if (error.response && error.response.status === 500) {
-          setErrorMessage("Server error. Please try again later");
-        } else if (error.response) {
-          setErrorMessage(error.response.data.errorMessage);
-        }
-      }
-    };
-    getStudent();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch({ type: "isLoading", payload: true });
+    makeReq(
+      "patch",
+      `/students/${studentId}`,
+      { subject: state.chosenSubject, grade: state.grade },
+      { headers: { Authorization: `Bearer ${isAuthenticated}` } }
+    );
+    dispatch({ type: "addGrade", payload: false });
+    dispatch({ type: "grade", payload: 5 });
+  };
 
-    return () => cancelReq.cancel("Request Canceled");
-  }, [studentId]);
+  useEffect(() => {
+    if (data && data.student)
+      dispatch({ type: "loadStudent", payload: data.student });
+  }, [data]);
+
+  useEffect(() => {
+    dispatch({ type: "isLoading", payload: true });
+    makeReq("get", `/students/${studentId}`);
+  }, [studentId, makeReq]);
+
+  useEffect(() => {
+    return () => cancelReq && cancelReq.cancel("Request Canceled");
+  }, [cancelReq]);
+
+  console.log(data);
+
+  if (errorMessage) {
+    return (
+      <main className="errorDisplay">
+        <h1>{errorMessage}</h1>
+        <button className="clearErrBtn" onClick={() => history.goBack()}>
+          Go Back
+        </button>
+      </main>
+    );
+  }
 
   return (
     <main>
-      <h1>Student: {student.name}</h1>
+      {state.isLoading && <h1 className="loading">Loading...</h1>}
+      <h1>Student: {state.name}</h1>
       <h3>Grades:</h3>
       <ul>
-        <li>Mathematics: {displayGrades(student.math)}</li>
-        <li>Biology: {displayGrades(student.biology)}</li>
-        <li>Sports: {displayGrades(student.sports)}</li>
-        <li>History: {displayGrades(student.history)}</li>
+        <li>Mathematics: {displayGrades(state.math)} </li>
+        <li>Biology: {displayGrades(state.biology)} </li>
+        <li>Sports: {displayGrades(state.sports)} </li>
+        <li>History: {displayGrades(state.history)} </li>
       </ul>
+      {!state.addGrade && teacher && (
+        <button onClick={() => dispatch({ type: "addGrade", payload: true })}>
+          Add Grade
+        </button>
+      )}
+      {state.addGrade && teacher && (
+        <form onSubmit={(e) => handleSubmit(e)} className="gradeForm">
+          <label htmlFor="subjects">Choose a Subject</label>
+          <select
+            onChange={(e) =>
+              dispatch({ type: "chosenSubject", payload: e.target.value })
+            }
+            name="subjects"
+          >
+            <option value="math">Math</option>
+            <option value="biology">Biology</option>
+            <option value="sports">Sports</option>
+            <option value="history">History</option>
+          </select>
+          <label htmlFor="grade">Choose a grade</label>
+          <input
+            name="grade"
+            value={state.grade}
+            onChange={(e) =>
+              dispatch({ type: "grade", payload: e.target.value })
+            }
+            type="number"
+            required
+            min="1"
+            max="10"
+          />
+          <button>Submit</button>
+        </form>
+      )}
     </main>
   );
+};
+
+Student.propTypes = {
+  isAuthenticated: PropTypes.string.isRequired,
+  teacher: PropTypes.bool.isRequired,
 };
 
 export default Student;

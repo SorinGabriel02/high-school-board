@@ -46,7 +46,7 @@ const login = async (req, res) => {
   if (user.teacher) {
     // if user has teacher privileges
     return res.json({
-      token: userToken(id),
+      token: userToken(user.id),
       teacher: true,
     });
   }

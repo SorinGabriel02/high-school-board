@@ -1,0 +1,46 @@
+.loginContainer {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loginForm input {
+  margin: 1.3vmax;
+  padding: 1vmax;
+}
+
+.loginForm button {
+  padding: 1vmax 1.5vmax;
+  background-color: rgb(219, 219, 253);
+  letter-spacing: 0.1rem;
+  cursor: pointer;
+  margin-top: 1vmax;
+  border: 1px solid black;
+  border-radius: 10px;
+  outline: none;
+}
+
+.loginForm button:hover {
+  box-shadow: 0 0 6px orange;
+}
+
+.loginForm button:active {
+  box-shadow: 0 0 2px orange;
+}
+
+.loginSwitch {
+  text-decoration: underline blue;
+  cursor: pointer;
+  user-select: none;
+}
+.loginSwitch:hover {
+  text-shadow: 0 0 1px blue;
+}

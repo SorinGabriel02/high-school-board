@@ -6,3 +6,30 @@ body {
   margin: 0;
   padding: 0;
 }
+
+h1,
+h2 {
+  text-align: center;
+}
+
+.errorDisplay {
+  height: 60vh;
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.clearErrBtn {
+  align-self: center;
+  padding: 1vmax 1.7vmax;
+  cursor: pointer;
+  border: 1px solid lightgrey;
+  background-color: lightskyblue;
+  box-shadow: 0 0 2px;
+}
+
+.clearErrBtn:hover {
+  box-shadow: 0 0 8px;
+}
