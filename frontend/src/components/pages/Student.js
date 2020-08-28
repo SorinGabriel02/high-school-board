@@ -95,8 +95,6 @@ const Student = ({ isAuthenticated, teacher }) => {
     return () => cancelReq && cancelReq.cancel("Request Canceled");
   }, [cancelReq]);
 
-  console.log(data);
-
   if (errorMessage) {
     return (
       <main className="errorDisplay">

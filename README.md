@@ -19,3 +19,13 @@ Teacher privileges are given directly in MongoDB by setting - teacher: true
 
 Everyone can see classes, students and grades.
 Only teachers can add, remove and grade students.
+
+## To run the app on your local machine you must first:
+
+- Clone or download the github repo
+- In a split terminal, on one side `cd` into `high-school-board/frontend` and run `npm install`
+- After installation run `npm start` to start the frontend side of app
+- On the other side of the split terminal `cd` into `high-school-board/backend` and run `npm install` to install dependencies
+- create a `.env` file inside `high-school-board/backend` and add 2 variables to it, first one: `MONGO_URI=mongoDB-connection-string-here` and second one: `JWT_SECRET=secret-string-here`
+- Run `npm start` to start the backend server
+- Any user with the teacher role is being assigned directly inside the database, any new account is simply guest.
