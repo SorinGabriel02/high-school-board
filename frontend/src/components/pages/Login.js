@@ -19,6 +19,7 @@ const loginReducer = (state, action) => {
         ...state,
         isLoading: action.payload,
       };
+    // change between login and signup
     case "loginMode":
       return {
         ...state,
@@ -68,10 +69,12 @@ const Login = ({ login }) => {
     login();
   };
 
+  // focus on input
   useEffect(() => {
     if (!errorMessage) emailRef.current.focus();
   }, [errorMessage]);
 
+  // add data to localStorage and push user back
   useEffect(() => {
     if (data && data.token) {
       localStorage.setItem("token", data.token);
@@ -84,6 +87,7 @@ const Login = ({ login }) => {
     if (data) history.goBack("/");
   }, [data, history]);
 
+  // cancel request if user navigates away from page
   useEffect(() => {
     return () => cancelReq && cancelReq.cancel();
   }, [cancelReq]);

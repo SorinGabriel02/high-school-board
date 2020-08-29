@@ -34,6 +34,7 @@ const studentReducer = (state, action) => {
         sports: action.payload.sports,
         history: action.payload.history,
       };
+    // add a new grade action taken
     case "addGrade":
       return {
         ...state,
@@ -68,6 +69,7 @@ const Student = ({ isAuthenticated, teacher }) => {
     return grades === "|" ? "No grades yet." : grades;
   };
 
+  // submit new grade
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch({ type: "isLoading", payload: true });
@@ -86,13 +88,15 @@ const Student = ({ isAuthenticated, teacher }) => {
       dispatch({ type: "loadStudent", payload: data.student });
   }, [data]);
 
+  // get student data from backend
   useEffect(() => {
     dispatch({ type: "isLoading", payload: true });
     makeReq("get", `/students/${studentId}`);
   }, [studentId, makeReq]);
 
+  // cancel request -> cleanup
   useEffect(() => {
-    return () => cancelReq && cancelReq.cancel("Request Canceled");
+    return () => cancelReq && cancelReq.cancel();
   }, [cancelReq]);
 
   if (errorMessage) {

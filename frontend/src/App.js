@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 import "./App.css";
 import Header from "./components/shared/Header";
@@ -26,14 +27,16 @@ const App = () => {
     setTeacher(false);
   };
 
-  // load auth from localStorage on page refresh
+  // load token from localStorage on page refresh if not expired
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      login();
+    const token = localStorage.getItem("token");
+    if (token) {
+      const expires = jwtDecode(token).exp;
+      const timeNow = new Date().getTime() / 1000;
+      expires > timeNow ? login() : logout();
     }
   }, [isAuthenticated]);
 
-  //console.log(teacher);
   return (
     <div className="App">
       <Header isAuthenticated={isAuthenticated} logout={logout} />

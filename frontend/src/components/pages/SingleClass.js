@@ -106,7 +106,7 @@ const SingleClass = ({ isAuthenticated, teacher }) => {
   }
 
   if (isLoading) return <h1>Loading...</h1>;
-  console.log(teacher);
+
   return (
     <main className="singleClass">
       <h1>{formatClassId()}-th grade students</h1>
