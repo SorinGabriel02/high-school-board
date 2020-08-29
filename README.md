@@ -22,10 +22,12 @@ Only teachers can add, remove and grade students.
 
 ## To run the app on your local machine you must first:
 
+### Note: If you use the same database credentials and secret, login inside the app with `test@test.com` and `password` This account has teacher role set to `true` so you can add, delete students and add grades.
+
 - Clone or download the github repo
 - In a split terminal, on one side `cd` into `high-school-board/frontend` and run `npm install`
 - After installation run `npm start` to start the frontend side of app
 - On the other side of the split terminal `cd` into `high-school-board/backend` and run `npm install` to install dependencies
 - create a `.env` file inside `high-school-board/backend` and add 2 variables to it, first one: `MONGO_URI=mongoDB-connection-string-here` and second one: `JWT_SECRET=secret-string-here`
 - Run `npm start` to start the backend server
-- Any user with the teacher role is being assigned directly inside the database, any new account is simply guest.
+- Any user with the teacher role has to be assigned directly inside the database by setting `teacher` prop to `true`, any new account is simply a guest.
